@@ -14,15 +14,15 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8">
+    <div className="bg-gray-50 min-h-screen py-8 animate-fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Header Card */}
-        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row items-center md:items-start gap-8 relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-b from-teal-50 to-transparent opacity-50"></div>
+        <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-b from-teal-50 to-transparent opacity-50 pointer-events-none"></div>
            
-           <div className="relative z-10">
-              <div className="w-32 h-32 rounded-full p-1.5 bg-gradient-to-br from-teal-400 via-emerald-500 to-teal-600 shadow-xl">
+           <div className="relative z-10 flex-shrink-0">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full p-1.5 bg-gradient-to-br from-teal-400 via-emerald-500 to-teal-600 shadow-xl mx-auto">
                  <img src={user.avatar} className="w-full h-full rounded-full border-4 border-white object-cover" alt="Avatar" />
               </div>
               <div className="absolute bottom-2 right-2 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded-lg border-2 border-white shadow-sm">
@@ -30,19 +30,19 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
               </div>
            </div>
 
-           <div className="flex-1 text-center md:text-left relative z-10">
+           <div className="flex-1 text-center md:text-left relative z-10 w-full">
               <div className="flex flex-col md:flex-row md:justify-between md:items-start">
                  <div>
-                    <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">{user.firstName} {user.lastName}</h1>
+                    <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900 mb-2">{user.firstName} {user.lastName}</h1>
                     <div className="flex items-center justify-center md:justify-start space-x-4 text-slate-500 text-sm font-medium mb-6">
                        <span className="flex items-center px-3 py-1 bg-slate-100 rounded-full"><MapPin size={14} className="mr-1.5" /> {user.city}</span>
-                       <span className="flex items-center px-3 py-1 bg-slate-100 rounded-full"><Calendar size={14} className="mr-1.5" /> Member since 2021</span>
+                       <span className="flex items-center px-3 py-1 bg-slate-100 rounded-full"><Calendar size={14} className="mr-1.5" /> Since 2021</span>
                     </div>
                  </div>
                  <div className="flex space-x-3 justify-center md:justify-end mb-6 md:mb-0">
                     <button className="p-3 rounded-xl border border-gray-200 hover:bg-gray-50 text-slate-600 transition-colors"><Settings size={20} /></button>
                     <button className="px-6 py-3 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-shadow shadow-lg shadow-slate-900/20 flex items-center">
-                       <Edit3 size={16} className="mr-2" /> Edit Profile
+                       <Edit3 size={16} className="mr-2" /> <span className="hidden sm:inline">Edit Profile</span><span className="sm:hidden">Edit</span>
                     </button>
                  </div>
               </div>

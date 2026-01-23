@@ -60,7 +60,7 @@ const ChallengeDetail: React.FC<ChallengeDetailProps> = ({ challenge, onNavigate
   return (
     <div className="animate-fade-in bg-gray-50 min-h-screen pb-12">
       {/* Back Button */}
-      <div className="bg-white border-b border-gray-100 sticky top-16 z-20">
+      <div className="bg-white border-b border-gray-100 sticky top-0 md:top-16 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
               <button onClick={() => onNavigate('challenges')} className="flex items-center text-slate-500 hover:text-orange-600 transition-colors font-medium text-sm md:text-base">
                   <ArrowLeft size={20} className="mr-2" /> Quay lại danh sách
@@ -75,6 +75,7 @@ const ChallengeDetail: React.FC<ChallengeDetailProps> = ({ challenge, onNavigate
             alt={challenge.title} 
             className="w-full h-full object-cover absolute inset-0"
             onError={handleImageError}
+            loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
           <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 max-w-7xl mx-auto text-white relative z-10">
@@ -150,7 +151,7 @@ const ChallengeDetail: React.FC<ChallengeDetailProps> = ({ challenge, onNavigate
                                           `}>
                                               {idx + 1}
                                           </div>
-                                          <img src={item.user.avatar} alt="Avatar" className="w-10 h-10 md:w-14 md:h-14 rounded-full border-2 border-white shadow-md mr-3 md:mr-4 object-cover flex-shrink-0" />
+                                          <img src={item.user.avatar} alt="Avatar" loading="lazy" className="w-10 h-10 md:w-14 md:h-14 rounded-full border-2 border-white shadow-md mr-3 md:mr-4 object-cover flex-shrink-0" />
                                           <div className="flex-grow min-w-0 overflow-hidden">
                                               <div className="font-bold text-slate-900 text-sm md:text-lg truncate group-hover:text-orange-600 transition-colors">
                                                   {item.user.firstName} {item.user.lastName}

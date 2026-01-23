@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, Home, Trophy, Calendar, User as UserIcon, LogIn, Activity, BookOpen, Image as ImageIcon, Info, Mail, Target } from 'lucide-react';
 import { User } from '../types';
 
@@ -13,6 +13,16 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate, user, onLogin, onLogout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isMobileMenuOpen]);
 
   const NavItem = ({ page, icon: Icon, label }: { page: string; icon: any; label: string }) => (
     <button
@@ -98,44 +108,51 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate, user
 
             {/* Mobile Menu Button */}
             <button
-              className="xl:hidden p-2 text-slate-600 hover:text-teal-600 transition-colors bg-gray-50 rounded-lg"
+              className="xl:hidden p-2 text-slate-600 hover:text-teal-600 transition-colors bg-gray-50 rounded-lg relative z-50"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile Nav Overlay */}
         {isMobileMenuOpen && (
-          <div className="xl:hidden bg-white/95 backdrop-blur-xl border-b border-gray-100 px-4 pt-2 pb-6 space-y-2 shadow-2xl animate-fade-in absolute w-full left-0">
-            <div className="grid grid-cols-2 gap-2">
+          <div className="xl:hidden fixed inset-0 z-40 bg-white/95 backdrop-blur-xl pt-24 px-6 animate-fade-in flex flex-col h-screen overflow-y-auto">
+            <div className="grid grid-cols-1 gap-3">
                 <NavItem page="home" icon={Home} label="Trang chủ" />
                 <NavItem page="activities" icon={Activity} label="Hoạt động" />
                 <NavItem page="challenges" icon={Target} label="Thử thách" />
-                <NavItem page="leaderboard" icon={Trophy} label="BXH" />
-                <NavItem page="events" icon={Calendar} label="Sự kiện" />
-                <NavItem page="blog" icon={BookOpen} label="Blog" />
-                <NavItem page="gallery" icon={ImageIcon} label="Thư viện" />
+                <NavItem page="leaderboard" icon={Trophy} label="Bảng Xếp Hạng" />
+                <NavItem page="events" icon={Calendar} label="Sự kiện & Giải đấu" />
+                <NavItem page="blog" icon={BookOpen} label="Blog & Tin tức" />
+                <NavItem page="gallery" icon={ImageIcon} label="Thư viện ảnh" />
                 <NavItem page="about" icon={Info} label="Về CLB" />
                 <NavItem page="contact" icon={Mail} label="Liên Hệ" />
             </div>
             
-            <div className="pt-4 border-t border-gray-100 mt-2">
+            <div className="pt-6 border-t border-gray-100 mt-6 mb-10">
                {user ? (
-                <button 
-                  onClick={() => { onNavigate('profile'); setIsMobileMenuOpen(false); }}
-                  className="flex items-center justify-center space-x-3 w-full px-4 py-3 bg-teal-50 rounded-xl border border-teal-100"
-                >
-                  <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-teal-200" />
-                  <span className="font-bold text-teal-900">Trang cá nhân của {user.firstName}</span>
-                </button>
+                <>
+                  <button 
+                    onClick={() => { onNavigate('profile'); setIsMobileMenuOpen(false); }}
+                    className="flex items-center space-x-3 w-full px-4 py-4 bg-teal-50 rounded-xl border border-teal-100 mb-3"
+                  >
+                    <img src={user.avatar} alt="Avatar" className="w-10 h-10 rounded-full border border-teal-200" />
+                    <div className="text-left">
+                        <div className="font-bold text-teal-900">{user.firstName} {user.lastName}</div>
+                        <div className="text-xs text-teal-600">Xem trang cá nhân</div>
+                    </div>
+                  </button>
+                  <button onClick={() => { onLogout(); setIsMobileMenuOpen(false); }} className="w-full py-3 text-slate-500 font-bold text-sm hover:bg-gray-100 rounded-xl">Đăng xuất</button>
+                </>
               ) : (
                 <button
                   onClick={() => { onLogin(); setIsMobileMenuOpen(false); }}
-                  className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-3 rounded-xl font-bold shadow-md"
+                  className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-4 rounded-xl font-bold shadow-md"
                 >
-                  <LogIn size={18} />
+                  <LogIn size={20} />
                   <span>Đăng nhập / Đăng ký</span>
                 </button>
               )}
@@ -209,8 +226,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate, user
               </div>
               
               <div className="flex space-x-4 mt-6">
-                 <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white cursor-pointer transition-colors text-slate-500"><Activity size={16} /></div>
-                 <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-pink-600 hover:text-white cursor-pointer transition-colors text-slate-500"><Activity size={16} /></div>
+                 {/* Social Links with Security Attributes */}
+                 <a href="#" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white cursor-pointer transition-colors text-slate-500" aria-label="Facebook"><Activity size={16} /></a>
+                 <a href="#" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-pink-600 hover:text-white cursor-pointer transition-colors text-slate-500" aria-label="Instagram"><Activity size={16} /></a>
               </div>
             </div>
           </div>
